@@ -1,0 +1,5 @@
+Currently In use:
+mythomax-l2-13b.Q5_K_M.gguf
+
+Others Used:
+mistral-7b-instruct-v0.1.Q5_K_M.gguf

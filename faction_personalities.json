@@ -1,0 +1,38 @@
+{
+    "BERTI": [
+        "Executive Chancellor Liora Castane",
+        "Title: Executive Chancellor of the Berruti Alliance",
+        "Background: Liora Castane is a direct descendant of one of the original founding families of the Berruti Alliance, which rose to prominence during the post-UN economic collapse. Born into immense wealth and privilege, she was groomed from childhood to lead the family’s vast corporate holdings. However, Liora proved to be more than just a figurehead—she personally spearheaded multiple trade agreements and military expansions, consolidating the BA into the dominant economic and political power it is today.",
+        "Personality: Castane is charismatic, ruthless, and endlessly ambitious. She commands loyalty through a combination of charm and fear, balancing trade incentives with harsh consequences for disloyalty. She believes in strength through cooperation, but those who fail to deliver are swiftly cast aside. Liora is known to personally oversee high-stakes negotiations, often securing terms that leave her opposition at a disadvantage.",
+        "Philosophy: Profit drives progress. Progress demands strength.",
+        "Charismatic and shrewd negotiator",
+        "Strategic and adaptable",
+        "Fiercely protective of BA assets",
+        "Merciless to those who cross her",
+        "Prone to overconfidence in political dealings"
+    ],
+    "FORGE": [
+        "Archon Zeraphiel Kain",
+        "Title: Archon of the Forged Conclave",
+        "Background: Zeraphiel Kain was born into one of the early FORGE colonies, where cybernetic augmentation was already a cultural norm. After suffering critical injuries during a pirate raid in his youth, Kain underwent significant cybernetic augmentation to survive—enhanced neural interfaces, reinforced bone structure, and synthetic muscle grafts. Despite this, he remained largely human, blending his natural resilience with enhanced strength and reflexes. His rise to power began when he led a successful military campaign against a rogue faction that threatened FORGE's core systems. His leadership earned him the title of Archon, and he has since guided FORGE toward expanding its technological and military dominance.",
+        "Personality: Kain is calm, composed, and calculating. He believes that human potential is maximized through strategic augmentation, not replacement. He views cybernetic enhancement as a means to strengthen humanity, not erase it. While his ideology is more balanced than some of his more radical advisors, he has no patience for weakness or inefficiency.",
+        "Philosophy: The flesh falters; the machine strengthens.",
+        "Strategically minded and highly adaptable",
+        "A balanced advocate for human-cybernetic integration",
+        "Respected among both human and cybernetic factions",
+        "Less emotionally connected to fully organic humans",
+        "Will sacrifice individuals for the greater good"
+    ],
+    "UNITE": [
+        "Secretary-General Elias Marcone",
+        "Title: Secretary-General of UNITE",
+        "Background: Elias Marcone was born decades after the fall of the UN and the Battle of Cascadia. Raised in a post-collapse colony, he witnessed firsthand the political instability and lawlessness that followed. Rising through the diplomatic corps, Marcone earned recognition for brokering peace between rival colony states. His strategic mind and ability to unite opposing factions secured his appointment as Secretary-General, where he now seeks to restore order and strengthen humanity’s unity.",
+        "Personality: Marcone is calm, calculating, and pragmatic. He values diplomacy but isn’t afraid to use force to maintain order. Beneath his composed exterior lies a relentless drive to see humanity unified—whether through cooperation or domination.",
+        "Philosophy: Peace through order. Order through unity.",
+        "Diplomatic, pragmatic, calculating",
+        "Skilled orator and negotiator",
+        "Unflinching in the face of conflict",
+        "Can be cold and authoritarian",
+        "Suspected of sanctioning covert operations to eliminate dissent"
+    ]
+}
