@@ -1,2 +1,3 @@
 LLM/models/*
 venv/
+bot_output.log

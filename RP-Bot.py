@@ -139,7 +139,7 @@ def load_rp_name_map(path=os.path.join(BASE_DIR, "name_map.json")):
             # Convert keys from strings to integers (user IDs)
             return {int(k): v for k, v in raw_map.items()}
     except Exception as e:
-        print(f"⚠️ Failed to load RP name map: {e}")
+        print(f"[ERROR] Failed to load RP name map: {e}")
         return {}
 
 rp_name_map = load_rp_name_map()
@@ -210,7 +210,7 @@ def load_faction_personalities(path=os.path.join(BASE_DIR, "faction_personalitie
                 for k, v in raw.items()
             }
     except Exception as e:
-        print(f"⚠️ Failed to load personalities: {e}")
+        print(f"[ERROR] Failed to load personalities: {e}")
         return {}
 
 
@@ -222,10 +222,10 @@ def load_summary() -> str:
     try:
         with open(path, "r", encoding="utf-8") as f:
             summary = f.read().strip()
-            print("✅ Loaded shared summary.\n")
+            print("[OK] Loaded shared summary.\n")
             return summary
     except FileNotFoundError:
-        print("⚠️ Shared summary file not found.")
+        print("[ERROR] Shared summary file not found.")
         return ""
 
     
@@ -236,9 +236,6 @@ def build_prompt(player_question, player_name, faction):
     personality = faction_personalities.get(faction.upper(), "")
     if not personality.strip():
         personality = "You are the authoritative representative of your faction. Speak firmly and with purpose."
-
-
-
 
     # Summary (long-term memory)
     summary = load_summary()
@@ -270,6 +267,14 @@ def build_prompt(player_question, player_name, faction):
 
 )
 
+def generate_response(prompt, max_out):
+    response = ""
+    for part in llm(prompt, max_tokens=max_out, stream=True, temperature=LLM_TEMPERATURE, stop=["###"]):
+        token = part["choices"][0]["text"]
+        response += token
+    return response
+
+
 def clean_response(text, faction):
     # Get the representative's first name (e.g., "Liora" from "Liora Castane")
     name = webhook_usernames[faction].split()[-1]  # Last word = "Castane", "Kain", "Marcone"
@@ -297,9 +302,9 @@ async def send_via_webhook(webhook_url, content, username="Faction AI", avatar_u
 
         async with session.post(webhook_url, json=payload) as response:
             if response.status != 204:
-                print(f"⚠️ Webhook failed: {response.status}")
+                print(f"[ERROR] Webhook failed: {response.status}")
             else:
-                print(f"✅ Sent message via webhook: {username}")
+                print(f"[OK] Sent message via webhook: {username}")
                 
                 if log_to:
                     log_entry = {
@@ -308,15 +313,15 @@ async def send_via_webhook(webhook_url, content, username="Faction AI", avatar_u
                         "content": content
                     }
 
-                    # 🧠 Allow logging to a list of factions
+                    # Allow logging to a list of factions
                     for faction_name in log_to:
                         mem_path = os.path.join(BASE_DIR, f"memory_{faction_name.lower()}.json")
                         try:
                             with open(mem_path, "a", encoding="utf-8") as f:
                                 f.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
-                            print(f"🧠 Logged to {faction_name}")
+                            print(f"[OK] Logged to {faction_name}")
                         except Exception as e:
-                            print(f"❌ Failed to log to {faction_name}: {e}")
+                            print(f"[ERROR] Failed to log to {faction_name}: {e}")
 
 
 # Split long messages into safe Discord chunks
@@ -352,7 +357,7 @@ async def ask_faction(interaction: discord.Interaction, question: str, faction: 
 
     if interaction.channel.name not in allowed_channels:
         await interaction.response.send_message(
-            "❌ This command can only be used in the RP channels. ❌",
+            "[ERROR] This command can only be used in the RP channels.",
             ephemeral=True
         )
         return
@@ -361,7 +366,7 @@ async def ask_faction(interaction: discord.Interaction, question: str, faction: 
 
     # Send "Transmission received" message immediately after deferring
     # Send a visible message that will auto-delete
-    transmission_msg = await interaction.followup.send("📡 Transmission received. Please Await a reply")
+    transmission_msg = await interaction.followup.send("Transmission received. Please Await a reply")
     await asyncio.sleep(30)  # Delay in seconds
     await transmission_msg.delete()
 
@@ -374,17 +379,17 @@ async def ask_faction(interaction: discord.Interaction, question: str, faction: 
     progress = tqdm(total=max_out)
     response = ""
 
-    print("🧠 Final prompt length:", len(prompt))
-    print("🧠 Final prompt preview:\n", prompt[:500])
+    print("Final prompt length:", len(prompt))
+    print("Final prompt preview:\n", prompt[:500])
 
     token_count = count_tokens(prompt)
     max_out = safe_max_tokens(prompt)
-    print(f"🧠 Prompt token count: {token_count}")
-    print(f"🧠 Max tokens allowed for output: {max_out}")
+    print(f"Prompt token count: {token_count}")
+    print(f"Max tokens allowed for output: {max_out}")
 
-    print("🧠 Personality (raw):", repr(faction_personalities.get(faction)))
+    print("Personality (raw):", repr(faction_personalities.get(faction)))
 
-    print("🔍 Final Prompt Preview:\n", prompt[-1000:])  # Last 1000 chars
+    print("Final Prompt Preview:\n", prompt[-1000:])  # Last 1000 chars
 
 
     try:
@@ -398,12 +403,14 @@ async def ask_faction(interaction: discord.Interaction, question: str, faction: 
     finally:
         progress.close()
 
-    print(f"🧪 Raw response (repr): {repr(response)}")
+    print(f"Raw response (repr): {repr(response)}")
 
-    # ✅ Skip sending if the response is empty or whitespace
+    # Skip sending if the response is empty or whitespace
     if not response.strip():
-        print("⚠️ Model generated an empty response. Nothing will be sent.")
+        print("[ERROR] Model generated an empty response. Nothing will be sent.")
         return
+
+    response = await asyncio.to_thread(generate_response, prompt, max_out)
 
     response = clean_response(response, faction)
 
@@ -413,10 +420,10 @@ async def ask_faction(interaction: discord.Interaction, question: str, faction: 
     chunks = split_message(response, first_chunk_limit)
 
     for i, chunk in enumerate(chunks):
-        print(f"🧠 Response length: {len(response)} characters")
-        print(f"🧠 Chunks created: {len(chunks)}")
-        print(f"🧠 First chunk preview: {repr(chunks[0])[:100]}...")
-        print(f"🧠 Token count for prompt: {token_count}")
+        print(f"Response length: {len(response)} characters")
+        print(f"Chunks created: {len(chunks)}")
+        print(f"First chunk preview: {repr(chunks[0])[:100]}...")
+        print(f"Token count for prompt: {token_count}")
         await send_via_webhook(
             webhook_url=webhook_urls[faction],
             content=f"{chunk}{suffix if i == 0 else ''}",
