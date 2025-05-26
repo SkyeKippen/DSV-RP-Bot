@@ -104,7 +104,7 @@ DISCORD_MESSAGE_LIMIT = 2000
 ### LLM STUFF
 CHANNEL_NAME = "rp-testing"
 MAX_TOKENS = 8000
-MAX_MEM_LINES = 10
+MAX_MEM_LINES = 20
 MAX_MEM_LINE_LENGTH = 500
 BATCH_SIZE = 64
 LLM_TEMPERATURE = 0.7
@@ -154,7 +154,7 @@ async def on_message(message):
             "timestamp": str(datetime.datetime.utcnow()),
             "author": message.author.display_name,
             "content": message.content,
-            "source": "user"  # 👈 Correctly mark this as a player-origin message
+            "source": "user"  # Correctly mark this as a player-origin message
         }
 
         factions = ["BERTI", "FORGE", "UNITE"]
@@ -248,7 +248,7 @@ def build_prompt(player_question, player_name, faction):
     return (
     f"{personality}\n\n"
     "Current Territorial Control:\n"
-    "- BERRTI: Tarlian (home), Lyara, Sonchia\n"
+    "- BERTI: Tarlian (home), Lyara, Sonchia\n"
     "- UNITE: Sevella (home), Tadara, Anatos\n"
     "- FORGE: Nibrax (home), Kuesh, Plunia\n\n"
     f"Summary of important past events:\n{summary}\n\n"
@@ -260,7 +260,6 @@ def build_prompt(player_question, player_name, faction):
     "Respond in character, with a single message.\n"
     "Do not include or restate the player's message.\n"
     "Do not write narration or story text. Do not describe actions, thoughts, or scene transitions.\n"
-    "Only respond with a single in-character dialogue message.\n"
     "Never break character.\n\n"
     f"Respond **as the faction representative of {faction}**, not any other entity."
     "### Response:\n"
