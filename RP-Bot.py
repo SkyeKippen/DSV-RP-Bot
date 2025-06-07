@@ -122,7 +122,7 @@ webhook_usernames = {
 }
 
 llm = Llama(
-    model_path=os.path.join(BASE_DIR, "models", "mythomax-l2-13b.Q5_K_M.gguf"),
+    model_path=os.path.join(BASE_DIR, "LLM", "mythomax-l2-13b.Q5_K_M.gguf"),
     n_ctx=MAX_TOKENS,
     n_threads=14,
     n_batch=BATCH_SIZE
